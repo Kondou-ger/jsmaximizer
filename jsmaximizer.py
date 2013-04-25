@@ -26,16 +26,12 @@ def main(argv):
 	indentation = 0
 
 	for fileline in [fileline.start() for fileline in re.finditer(";|{|}", mincontent)]:
+		maxfile.write("\t"*indentation + mincontent[lastseperator:fileline] + "\n")
+
 		if "{" in mincontent[lastseperator:fileline+1]:
-			maxfile.write("\t"*indentation + mincontent[lastseperator:fileline+1] + "\n")
 			indentation += 1
-		elif "}" in mincontent[lastseperator:fileline+1]:
-			maxfile.write("\t"*indentation + mincontent[lastseperator:fileline] + "\n")
-			if indentation != 0:
-				indentation -= 1
-			maxfile.write("\t"*indentation + mincontent[fileline:fileline+1] + "\n")
-		else: # else it's a ;
-			maxfile.write("\t"*indentation + mincontent[lastseperator:fileline] + "\n")
+		elif ("}" in mincontent[lastseperator:fileline+1]) and (indentation > 0):
+			indentation -= 1
 
 		lastseperator = fileline+1
 	
