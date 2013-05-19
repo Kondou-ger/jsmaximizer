@@ -25,15 +25,15 @@ def main(argv):
 	lastseperator = 0
 	indentation = 0
 
-	for fileline in [fileline.start() for fileline in re.finditer(";|{|}", mincontent)]:
-		maxfile.write("\t"*indentation + mincontent[lastseperator:fileline] + "\n")
+	for fileline in [fileline.start() for fileline in re.finditer("[^\"][;{}]", mincontent)]:
+		maxfile.write("\t"*indentation + mincontent[lastseperator:fileline+2] + "\n")
 
-		if "{" in mincontent[lastseperator:fileline+1]:
+		if "{" in mincontent[lastseperator:fileline+2]:
 			indentation += 1
-		elif ("}" in mincontent[lastseperator:fileline+1]) and (indentation > 0):
+		elif ("}" in mincontent[lastseperator:fileline+2]) and (indentation > 0):
 			indentation -= 1
 
-		lastseperator = fileline+1
+		lastseperator = fileline+2
 	
 	maxfile.write(mincontent[lastseperator:])
 
